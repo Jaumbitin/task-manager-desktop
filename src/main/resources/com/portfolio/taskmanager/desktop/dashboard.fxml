@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.portfolio.taskmanager.desktop.controller.DashboardController" styleClass="dashboard">
+    <left>
+        <VBox prefWidth="218" minWidth="218" spacing="22" styleClass="sidebar">
+            <padding><Insets top="34" right="20" bottom="24" left="20"/></padding>
+            <Label text="✓  Task Manager" styleClass="sidebar-brand"/>
+            <Label text="MEU ESPAÇO" styleClass="nav-caption"/>
+            <VBox fx:id="navigation" spacing="8">
+                <Button text="▤   Todas as tarefas" onAction="#showAll" maxWidth="Infinity" styleClass="nav-button"/>
+                <Button text="○   Pendentes" onAction="#showPending" maxWidth="Infinity" styleClass="nav-button"/>
+                <Button text="◷   Em andamento" onAction="#showProgress" maxWidth="Infinity" styleClass="nav-button"/>
+                <Button text="✓   Concluídas" onAction="#showCompleted" maxWidth="Infinity" styleClass="nav-button"/>
+            </VBox>
+            <Region VBox.vgrow="ALWAYS"/>
+            <VBox spacing="9" styleClass="sidebar-note">
+                <Label text="Pequenos passos." styleClass="note-title"/>
+                <Label text="Uma tarefa de cada vez também é progresso." wrapText="true" styleClass="muted"/>
+            </VBox>
+            <Separator/>
+            <Label text="SUA CONTA" styleClass="nav-caption"/>
+            <Label fx:id="emailLabel" text="" maxWidth="175" textOverrun="CENTER_ELLIPSIS" styleClass="account-email"/>
+            <Button text="Sair da conta" onAction="#logout" styleClass="quiet-button"/>
+        </VBox>
+    </left>
+    <center>
+        <VBox spacing="20">
+            <padding><Insets top="34" right="30" bottom="18" left="30"/></padding>
+            <HBox alignment="CENTER_LEFT">
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="VAMOS ORGANIZAR O DIA" styleClass="eyebrow"/>
+                    <Label text="Minhas tarefas" styleClass="page-heading"/>
+                    <Label fx:id="pageSubtitle" wrapText="true" styleClass="muted"/>
+                </VBox>
+                <HBox fx:id="actions" spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Atualizar" onAction="#reload" styleClass="secondary-button"/>
+                    <Button text="+  Nova tarefa" onAction="#newTask" styleClass="primary-button"/>
+                </HBox>
+            </HBox>
+            <HBox spacing="14">
+                <VBox spacing="9" HBox.hgrow="ALWAYS" styleClass="stat-card">
+                    <Label text="TOTAL DE TAREFAS" styleClass="stat-caption"/>
+                    <Label fx:id="totalCount" text="0" styleClass="stat-number"/>
+                </VBox>
+                <VBox spacing="9" HBox.hgrow="ALWAYS" styleClass="stat-card">
+                    <Label text="PARA CONCLUIR" styleClass="stat-caption"/>
+                    <Label fx:id="openCount" text="0" styleClass="stat-number"/>
+                </VBox>
+                <VBox spacing="9" HBox.hgrow="ALWAYS" styleClass="stat-card,stat-completed">
+                    <Label text="CONCLUÍDAS" styleClass="stat-caption"/>
+                    <Label fx:id="completedCount" text="0" styleClass="stat-number"/>
+                </VBox>
+            </HBox>
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <TextField fx:id="search" promptText="Buscar por título ou descrição..." accessibleText="Buscar tarefas" HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="statusFilter" prefWidth="175" accessibleText="Filtrar por status"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+                <Label fx:id="resultCount" text="0 tarefas" styleClass="field-label"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Mais recentes primeiro" styleClass="small"/>
+            </HBox>
+            <ListView fx:id="taskList" VBox.vgrow="ALWAYS" styleClass="task-list" accessibleText="Lista de tarefas"/>
+            <HBox spacing="10" alignment="CENTER_LEFT" minHeight="24">
+                <ProgressIndicator fx:id="progress" prefWidth="18" prefHeight="18" maxWidth="18" maxHeight="18" visible="false" managed="false"/>
+                <Label fx:id="message" wrapText="true" styleClass="feedback"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

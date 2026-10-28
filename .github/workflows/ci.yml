@@ -1,0 +1,18 @@
+name: Desktop tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: JavaFX graphical dependencies
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 xvfb
+      - name: Test and package
+        run: xvfb-run -a ./mvnw --batch-mode verify -Dprism.order=sw

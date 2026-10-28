@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.portfolio.taskmanager.desktop.controller.AuthController" styleClass="auth-root">
+    <VBox prefWidth="455" minWidth="355" spacing="24" styleClass="brand-panel">
+        <padding><Insets top="48" right="42" bottom="40" left="42"/></padding>
+        <Label text="✓  TASK MANAGER" styleClass="brand-wordmark"/>
+        <Region VBox.vgrow="ALWAYS"/>
+        <Label text="Menos ruído.&#10;Mais foco." styleClass="brand-headline"/>
+        <Label text="Organize suas tarefas e encontre espaço para o que realmente importa." wrapText="true" styleClass="brand-copy"/>
+        <VBox spacing="16" styleClass="preview-card">
+            <Label text="UM PASSO DE CADA VEZ" styleClass="preview-caption"/>
+            <Label text="✓   Tire uma ideia do papel" styleClass="preview-item"/>
+            <Label text="○   Encontre seu ritmo" styleClass="preview-item"/>
+            <Label text="○   Celebre cada pequena conquista" styleClass="preview-item"/>
+        </VBox>
+        <Region VBox.vgrow="ALWAYS"/>
+        <Label text="Seu dia, com mais clareza." styleClass="brand-footer"/>
+    </VBox>
+    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" styleClass="auth-content">
+        <padding><Insets top="36" right="45" bottom="36" left="45"/></padding>
+        <VBox maxWidth="390" spacing="14">
+            <Label text="SEU ESPAÇO DE ORGANIZAÇÃO" styleClass="eyebrow"/>
+            <Label fx:id="heading" text="Bom ter você por aqui." wrapText="true" styleClass="auth-heading"/>
+            <Label fx:id="subtitle" text="Entre para continuar de onde parou." wrapText="true" styleClass="muted"/>
+            <VBox fx:id="form" spacing="12" styleClass="auth-form">
+                <Label text="E-mail" labelFor="$email" styleClass="field-label"/>
+                <TextField fx:id="email" promptText="voce@exemplo.com" onAction="#submit"/>
+                <Label text="Senha" labelFor="$password" styleClass="field-label"/>
+                <PasswordField fx:id="password" promptText="Sua senha" onAction="#submit"/>
+                <VBox fx:id="confirmGroup" spacing="10" visible="false" managed="false">
+                    <Label text="Confirme a senha" labelFor="$confirmation" styleClass="field-label"/>
+                    <PasswordField fx:id="confirmation" promptText="Repita sua senha" onAction="#submit"/>
+                </VBox>
+                <Button fx:id="submit" text="Entrar na minha conta" onAction="#submit" maxWidth="Infinity" defaultButton="true" styleClass="primary-button,auth-submit"/>
+            </VBox>
+            <ProgressIndicator fx:id="progress" prefWidth="24" prefHeight="24" visible="false" managed="false"/>
+            <Label fx:id="message" wrapText="true" minHeight="36" styleClass="error-text"/>
+            <HBox alignment="CENTER_LEFT" spacing="6">
+                <Label fx:id="switchPrompt" text="Ainda não tem uma conta?" styleClass="muted"/>
+                <Button fx:id="switchMode" text="Criar conta" onAction="#toggleMode" styleClass="link-button"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</HBox>
