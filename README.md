@@ -96,3 +96,7 @@ O teste contra a API real é opt-in e não roda na pipeline do desktop.
 Esta versão é um aplicativo de desenvolvimento/portfólio.
 Para distribuição, ainda é necessário empacotar um runtime/instalador
 e configurar HTTPS no backend remoto.
+
+## Interface
+
+Veja as [decisões de interface](docs/DESIGN.md).

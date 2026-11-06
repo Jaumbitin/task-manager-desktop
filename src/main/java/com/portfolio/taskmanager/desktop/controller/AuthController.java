@@ -24,11 +24,11 @@ public final class AuthController {
     }
     @FXML private void toggleMode() {
         registering = !registering;
-        heading.setText(registering ? "Crie sua conta" : "Bom ter você por aqui.");
-        subtitle.setText(registering ? "Um novo espaço para organizar suas ideias." : "Entre para continuar de onde parou.");
+        heading.setText(registering ? "Crie sua conta" : "Entrar");
+        subtitle.setText(registering ? "Cadastre-se para começar sua lista." : "Acesse sua conta para ver suas tarefas.");
         confirmGroup.setVisible(registering);
         confirmGroup.setManaged(registering);
-        submit.setText(registering ? "Criar conta" : "Entrar na minha conta");
+        submit.setText(registering ? "Criar conta" : "Entrar");
         switchPrompt.setText(registering ? "Já tem uma conta?" : "Ainda não tem uma conta?");
         switchMode.setText(registering ? "Entrar" : "Criar conta");
         message.setText("");

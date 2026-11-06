@@ -34,6 +34,16 @@ class FxmlSmokeTest {
                 scene.getStylesheets().add(getClass().getResource("/com/portfolio/taskmanager/desktop/styles.css").toExternalForm());
                 root.applyCss();
                 root.layout();
+                if (file.equals("auth.fxml")) {
+                    WritableImage shot = scene.snapshot(null);
+                    int width = (int)shot.getWidth(), height = (int)shot.getHeight();
+                    int[] pixels = new int[width * height];
+                    shot.getPixelReader().getPixels(0,0,width,height,PixelFormat.getIntArgbInstance(),pixels,0,width);
+                    BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
+                    image.setRGB(0,0,width,height,pixels,0,width);
+                    Files.createDirectories(Path.of("work"));
+                    ImageIO.write(image,"png",Path.of("work/auth-preview.png").toFile());
+                }
                 assertNotNull(loader.getController());
                 assertFalse(root.getChildrenUnmodifiable().isEmpty());
             }

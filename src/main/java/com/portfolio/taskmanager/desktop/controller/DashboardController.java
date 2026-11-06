@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public final class DashboardController {
-    @FXML private Label emailLabel, totalCount, openCount, completedCount, resultCount, message, pageSubtitle;
+    @FXML private Label emailLabel, totalCount, openCount, completedCount, resultCount, message, pageSubtitle, pageHeading;
     @FXML private TextField search;
     @FXML private ComboBox<String> statusFilter;
     @FXML private ListView<TaskItem> taskList;
@@ -77,55 +77,51 @@ public final class DashboardController {
                 .toList();
         taskList.setItems(FXCollections.observableArrayList(visible));
         resultCount.setText(visible.size() + (visible.size() == 1 ? " tarefa" : " tarefas"));
-        Label title = new Label(tasks.isEmpty() ? "Seu próximo passo começa aqui." : "Nenhuma tarefa encontrada.");
+        Label title = new Label(tasks.isEmpty() ? "Sua lista está pronta para começar" : "Nenhuma tarefa encontrada");
         title.getStyleClass().add("empty-title");
-        Label hint = new Label(tasks.isEmpty() ? "Crie sua primeira tarefa e tire uma ideia do papel." : "Experimente outro termo ou mude o filtro.");
+        Label hint = new Label(tasks.isEmpty() ? "Adicione uma tarefa para acompanhar o que precisa fazer." : "Experimente outro termo ou mude o filtro.");
         hint.getStyleClass().add("muted");
-        VBox empty = new VBox(10, new Label("✓"), title, hint);
+        Label icon = new Label("✓"); icon.getStyleClass().add("empty-icon");
+        Button add = new Button("+  Adicionar tarefa"); add.getStyleClass().add("primary-button"); add.setOnAction(e -> newTask()); add.setVisible(tasks.isEmpty()); add.setManaged(tasks.isEmpty());
+        VBox empty = new VBox(14, icon, title, hint, add);
         empty.setAlignment(Pos.CENTER);
         empty.getStyleClass().add("empty-state");
         taskList.setPlaceholder(empty);
-        pageSubtitle.setText(tasks.isEmpty() ? "Um espaço tranquilo para organizar o que importa."
-                : (tasks.size() - done) + " pendente(s) de conclusão. Um passo de cada vez.");
+        pageSubtitle.setText(tasks.isEmpty() ? "Comece adicionando sua primeira tarefa." : (tasks.size() - done) + " em aberto · " + done + (done == 1 ? " concluída" : " concluídas"));
+        if (pageHeading != null) pageHeading.setText(new String[]{"Todas as tarefas", "Pendentes", "Em andamento", "Concluídas"}[Math.max(0, selected)]);
+        for (int i = 0; i < navigation.getChildren().size(); i++) {
+            Node item = navigation.getChildren().get(i);
+            item.getStyleClass().remove("active");
+            if (i == Math.max(0, selected)) item.getStyleClass().add("active");
+        }
     }
 
     private Node card(TaskItem task) {
-        Label title = new Label(task.title());
-        title.getStyleClass().add("task-title");
-        title.setWrapText(true);
-        Label badge = new Label(task.status().toString());
-        badge.getStyleClass().addAll("badge", task.status().css());
-        Region gap = new Region();
-        HBox.setHgrow(gap, Priority.ALWAYS);
-        HBox top = new HBox(14, title, gap, badge);
-        top.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(title, Priority.ALWAYS);
-        title.setMaxWidth(Double.MAX_VALUE);
-        Label description = new Label(task.description() == null || task.description().isBlank() ? "Sem descrição" : task.description());
-        description.getStyleClass().add("task-description");
-        description.setWrapText(true);
-        description.setMaxHeight(44);
-        description.setTextOverrun(OverrunStyle.ELLIPSIS);
-        Label created = new Label(task.createdAt() == null ? "" : "Criada em " + task.createdAt().format(DATE));
-        created.getStyleClass().add("small");
-        Button edit = new Button("Editar");
-        edit.getStyleClass().add("quiet-button");
-        edit.setOnAction(e -> openEditor(task));
-        Button complete = new Button(task.status() == TaskStatus.COMPLETED ? "Reabrir" : "✓  Concluir");
-        complete.getStyleClass().add("soft-button");
-        complete.setOnAction(e -> run(app.api().changeStatus(task.id(),
-                task.status() == TaskStatus.COMPLETED ? TaskStatus.PENDING : TaskStatus.COMPLETED),
+        boolean done = task.status() == TaskStatus.COMPLETED;
+        Button complete = new Button("✓");
+        complete.getStyleClass().add("check-action");
+        if (done) complete.getStyleClass().add("checked");
+        complete.setAccessibleText((done ? "Reabrir " : "Concluir ") + task.title());
+        complete.setTooltip(new Tooltip(done ? "Reabrir tarefa" : "Concluir tarefa"));
+        complete.setOnAction(e -> run(app.api().changeStatus(task.id(), done ? TaskStatus.PENDING : TaskStatus.COMPLETED),
                 updated -> replace(updated, "Status atualizado.")));
-        Button delete = new Button("Excluir");
-        delete.getStyleClass().add("danger-button");
-        delete.setOnAction(e -> confirmDelete(task));
-        Region space = new Region();
-        HBox.setHgrow(space, Priority.ALWAYS);
-        HBox footer = new HBox(8, created, space, edit, complete, delete);
-        footer.setAlignment(Pos.CENTER_LEFT);
-        VBox card = new VBox(12, top, description, footer);
-        card.getStyleClass().add("task-card");
-        return card;
+        Label title = new Label(task.title()); title.getStyleClass().add("task-title"); title.setWrapText(true);
+        Label badge = new Label(task.status().toString()); badge.getStyleClass().addAll("badge", task.status().css());
+        Region gap = new Region(); HBox.setHgrow(gap, Priority.ALWAYS);
+        HBox top = new HBox(12, title, gap, badge); top.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(title, Priority.ALWAYS); title.setMaxWidth(Double.MAX_VALUE);
+        Label description = new Label(Objects.toString(task.description(), ""));
+        description.getStyleClass().add("task-description"); description.setWrapText(true); description.setMaxHeight(38);
+        description.setVisible(!description.getText().isBlank()); description.setManaged(!description.getText().isBlank());
+        Label created = new Label(task.createdAt() == null ? "" : task.createdAt().format(DATE)); created.getStyleClass().add("small");
+        Button edit = new Button("Editar"); edit.getStyleClass().add("quiet-button"); edit.setOnAction(e -> openEditor(task));
+        Button delete = new Button("Excluir"); delete.getStyleClass().add("danger-button"); delete.setOnAction(e -> confirmDelete(task));
+        Region space = new Region(); HBox.setHgrow(space, Priority.ALWAYS);
+        HBox footer = new HBox(5, created, space, edit, delete); footer.setAlignment(Pos.CENTER_LEFT);
+        VBox content = new VBox(7, top, description, footer); HBox.setHgrow(content, Priority.ALWAYS);
+        HBox row = new HBox(14, complete, content); row.setAlignment(Pos.TOP_LEFT); row.getStyleClass().add("task-card");
+        if (done) row.getStyleClass().add("task-done");
+        return row;
     }
 
     private void confirmDelete(TaskItem task) {
