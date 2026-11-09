@@ -2,6 +2,19 @@
 
 Aplicativo JavaFX separado do backend `task-manager-api`, usando Java 21, Maven, FXML e CSS.
 
+## Navegação
+
+- [Como executar no IntelliJ](#como-executar-no-intellij)
+- [Onde está cada responsabilidade](#onde-está-cada-responsabilidade)
+- [Fluxo da aplicação](#fluxo-da-aplicação)
+- [Configuração da API](#configuração-da-api)
+- [Testes](#testes)
+- [Escopo desta primeira versão](#escopo-desta-primeira-versão)
+- [Preview](#preview)
+- [Regras de entrada](#regras-de-entrada)
+- [Backend e estudo do projeto](#backend-e-estudo-do-projeto)
+- [Git e integração contínua](#git-e-integração-contínua)
+
 ## Como executar no IntelliJ
 
 1. Abra esta pasta como um **novo projeto** (File → Open → New Window).
@@ -81,7 +94,7 @@ A interface antecipa essas validações; o backend também as aplica.
 ## Backend e estudo do projeto
 
 O backend fica no projeto separado task-manager-api:
-https://github.com/Jaumbitin/task-manager-api
+[Task Manager API](https://github.com/Jaumbitin/task-manager-api)
 
 Veja [arquitetura e ordem de leitura](docs/ARCHITECTURE.md)
 e [roteiro de testes](docs/TESTING.md).
